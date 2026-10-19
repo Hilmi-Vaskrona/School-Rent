@@ -1,0 +1,29 @@
+export enum ItemStatus {
+  AVAILABLE = 'AVAILABLE',
+  BORROWED = 'BORROWED',
+  MAINTENANCE = 'MAINTENANCE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum ItemCondition {
+  BAIK = 'BAIK',
+  RUSAK_RINGAN = 'RUSAK_RINGAN',
+  RUSAK_BERAT = 'RUSAK_BERAT',
+  HILANG = 'HILANG',
+}
+
+export enum LoanStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  BORROWED = 'BORROWED',
+  RETURNED = 'RETURNED',
+  CANCELLED = 'CANCELLED',
+  OVERDUE = 'OVERDUE',
+}
+
+export enum FineStatus {
+  UNPAID = 'UNPAID',
+  PAID = 'PAID',
+  WAIVED = 'WAIVED',
+}
