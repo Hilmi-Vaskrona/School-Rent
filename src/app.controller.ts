@@ -1,12 +1,29 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from './common/decorators/roles.decorator';
 
+@ApiTags('Root')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
+  @Public()
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @ApiOperation({ summary: 'Status API' })
+  getHome() {
+    return {
+      success: true,
+      message: '🚀 SchoolRent Backend API is running smoothly on Vercel!',
+      docs: '/api/docs',
+      endpoints: {
+        auth_login: '/api/auth/login',
+        auth_register: '/api/auth/register',
+        items: '/api/items',
+        categories: '/api/categories',
+        loans: '/api/loans',
+        returns: '/api/returns',
+        fines: '/api/fines',
+        dashboard: '/api/dashboard/stats',
+        reports: '/api/reports/statistics',
+      },
+    };
   }
 }

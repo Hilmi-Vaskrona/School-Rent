@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 import { SupabaseModule } from './supabase/supabase.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SettingsModule } from './settings/settings.module';
@@ -32,5 +33,6 @@ import { ReportsModule } from './reports/reports.module';
     DashboardModule,
     ReportsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
