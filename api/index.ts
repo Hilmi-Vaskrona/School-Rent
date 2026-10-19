@@ -5,11 +5,11 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from '../src/app.module';
 import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter';
 import { TransformInterceptor } from '../src/common/interceptors/transform.interceptor';
-import express, { Express } from 'express';
+import express from 'express';
 
-let cachedServer: Express;
+let cachedServer: express.Express;
 
-async function bootstrap(): Promise<Express> {
+async function bootstrap(): Promise<express.Express> {
   if (!cachedServer) {
     const expressApp = express();
     const app = await NestFactory.create(
@@ -47,8 +47,7 @@ export default async function handler(req: any, res: any) {
     console.error('Vercel Bootstrap Error:', error);
     return res.status(500).json({
       status: 'error',
-      errorName: error?.name,
-      errorMessage: error?.message,
+      message: error?.message || String(error),
       stack: error?.stack,
     });
   }
