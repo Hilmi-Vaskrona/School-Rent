@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -30,11 +31,11 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
 
-  // 4. Swagger API Documentation (Kontrak API untuk Frontend Next.js)
+  // 4. Swagger API Documentation
   const config = new DocumentBuilder()
     .setTitle('SchoolRent API')
     .setDescription(
-      'REST API Backend untuk Sistem Peminjaman Barang & Fasilitas Sekolah (SchoolRent) berbasis NestJS dan Supabase. Lengkap dengan otentikasi JWT, role SISWA, PETUGAS, ADMIN, persetujuan pinjaman, pengembalian otomatis, kalkulasi denda, notifikasi, dan laporan.',
+      'REST API Backend untuk Sistem Peminjaman Barang & Fasilitas Sekolah (SchoolRent)',
     )
     .setVersion('1.0.0')
     .addBearerAuth(
@@ -43,7 +44,6 @@ async function bootstrap() {
         scheme: 'bearer',
         bearerFormat: 'JWT',
         name: 'Authorization',
-        description: 'Masukkan JWT Token Anda di sini (Format: Bearer <token>)',
         in: 'header',
       },
       'bearer',
@@ -56,10 +56,10 @@ async function bootstrap() {
   });
 
   // 5. Start Server
-  const port = process.env.PORT || 3001;
-  await app.listen(port);
+  // Di cloud Vercel, biarkan port ditentukan oleh sistem dan dengarkan '0.0.0.0'
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
 
-  logger.log(`🚀 SchoolRent Backend API berjalan di: http://localhost:${port}`);
-  logger.log(`📑 Dokumentasi Swagger API aktif di: http://localhost:${port}/api/docs`);
+  logger.log(`🚀 SchoolRent Backend API berjalan di port ${port}`);
 }
 bootstrap();
