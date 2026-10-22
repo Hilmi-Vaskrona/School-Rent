@@ -100,7 +100,9 @@ export class ReportsService {
 
     let q = this.supabaseService
       .from('loans')
-      .select('*, items(*, categories(name)), users(id, name, email, class_name, major, phone)');
+      .select(
+        '*, items(*, categories(name)), users!user_id(id, name, email, class_name, major, phone), borrower:users!user_id(id, name, email, class_name, major, phone)',
+      );
 
     if (filter.start_date) {
       q = q.gte('borrow_date', filter.start_date);
@@ -137,7 +139,9 @@ export class ReportsService {
 
     let q = this.supabaseService
       .from('returns')
-      .select('*, loans(*, items(id, name, code), users(id, name, email, class_name)), processed_by_user:users!returns_processed_by_fkey(name)');
+      .select(
+        '*, loans(*, items(id, name, code), users!user_id(id, name, email, class_name), borrower:users!user_id(id, name, email, class_name)), processed_by_user:users!processed_by(name)',
+      );
 
     if (filter.start_date) {
       q = q.gte('return_date', filter.start_date);
@@ -203,7 +207,9 @@ export class ReportsService {
 
     const { data, error } = await this.supabaseService
       .from('loans')
-      .select('*, items(id, name, code), users(id, name, email, class_name, phone)')
+      .select(
+        '*, items(id, name, code), users!user_id(id, name, email, class_name, phone), borrower:users!user_id(id, name, email, class_name, phone)',
+      )
       .eq('status', LoanStatus.BORROWED)
       .lt('due_date', today)
       .order('due_date', { ascending: true });

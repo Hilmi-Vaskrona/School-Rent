@@ -23,6 +23,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
+      const defaultStatusText: Record<number, string> = {
+        400: 'Bad Request',
+        401: 'Unauthorized',
+        403: 'Forbidden',
+        404: 'Not Found',
+        409: 'Conflict',
+        422: 'Unprocessable Entity',
+        500: 'Internal Server Error',
+      };
+      error = defaultStatusText[status] || exception.name.replace(/Exception$/, '') || 'Error';
+
       const res = exception.getResponse();
       if (typeof res === 'string') {
         message = res;

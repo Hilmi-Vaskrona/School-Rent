@@ -1,7 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsOptional, IsString, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
 import { FineStatus } from '../../common/enums/app.enums';
+import { UUID_REGEX } from '../../common/constants/app.constants';
 
 export class PayFineDto {
   @ApiPropertyOptional({ example: 'Dibayar tunai di ruang sarpras', description: 'Catatan pembayaran denda' })
@@ -25,7 +26,7 @@ export class QueryFinesDto {
 
   @ApiPropertyOptional({ description: 'Filter berdasarkan ID pengguna peminjam' })
   @IsOptional()
-  @IsUUID('4')
+  @Matches(UUID_REGEX, { message: 'user_id harus berupa UUID yang valid' })
   user_id?: string;
 
   @ApiPropertyOptional({ example: 1, default: 1 })

@@ -4,14 +4,15 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
+  Matches,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ItemCondition } from '../../common/enums/app.enums';
+import { UUID_REGEX } from '../../common/constants/app.constants';
 
 export class ProcessReturnDto {
   @ApiProperty({ example: 'a123e456-e89b-12d3-a456-426614174000', description: 'ID Transaksi Peminjaman (Loans)' })
-  @IsUUID('4', { message: 'ID peminjaman harus berupa UUID valid' })
+  @Matches(UUID_REGEX, { message: 'ID peminjaman harus berupa UUID valid' })
   @IsNotEmpty({ message: 'ID peminjaman wajib diisi' })
   loan_id: string;
 
@@ -38,7 +39,7 @@ export class ProcessReturnDto {
 export class QueryReturnsDto {
   @ApiPropertyOptional({ description: 'Filter berdasarkan ID peminjam' })
   @IsOptional()
-  @IsUUID('4')
+  @Matches(UUID_REGEX, { message: 'user_id harus berupa UUID yang valid' })
   user_id?: string;
 
   @ApiPropertyOptional({ example: 1, default: 1 })

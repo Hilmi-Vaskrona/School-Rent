@@ -34,7 +34,7 @@ export class FinesService {
     let q = this.supabaseService
       .from('fines')
       .select(
-        '*, users(id, name, email, class_name, phone), loans(id, loan_code, due_date, items(id, name, code)), handled_by_user:users!fines_handled_by_fkey(id, name)',
+        '*, users!user_id(id, name, email, class_name, phone), borrower:users!user_id(id, name, email, class_name, phone), loans(id, loan_code, due_date, items(id, name, code)), handled_by_user:users!handled_by(id, name)',
         { count: 'exact' },
       );
 
@@ -73,7 +73,7 @@ export class FinesService {
     const { data, error } = await this.supabaseService
       .from('fines')
       .select(
-        '*, users(id, name, email, class_name, phone), loans(*, items(id, name, code, image_url)), handled_by_user:users!fines_handled_by_fkey(id, name)',
+        '*, users!user_id(id, name, email, class_name, phone), borrower:users!user_id(id, name, email, class_name, phone), loans(*, items(id, name, code, image_url)), handled_by_user:users!handled_by(id, name)',
       )
       .eq('id', id)
       .maybeSingle();
@@ -107,7 +107,9 @@ export class FinesService {
         payment_notes: dto.notes?.trim() || 'Pembayaran denda lunas',
       })
       .eq('id', id)
-      .select('*, users(id, name, email), loans(loan_code)')
+      .select(
+        '*, users!user_id(id, name, email), borrower:users!user_id(id, name, email), loans(loan_code)',
+      )
       .single();
 
     if (error) {
@@ -145,7 +147,9 @@ export class FinesService {
         payment_notes: dto.reason?.trim() || 'Denda dibebaskan oleh kebijakan sekolah',
       })
       .eq('id', id)
-      .select('*, users(id, name, email), loans(loan_code)')
+      .select(
+        '*, users!user_id(id, name, email), borrower:users!user_id(id, name, email), loans(loan_code)',
+      )
       .single();
 
     if (error) {

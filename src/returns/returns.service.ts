@@ -31,7 +31,9 @@ export class ReturnsService {
     // 1. Ambil data peminjaman
     const { data: loan, error: loanErr } = await this.supabaseService
       .from('loans')
-      .select('*, items(id, name, available_stock, total_stock), users(id, name, email)')
+      .select(
+        '*, items(id, name, available_stock, total_stock), users!user_id(id, name, email), borrower:users!user_id(id, name, email)',
+      )
       .eq('id', dto.loan_id)
       .maybeSingle();
 
@@ -169,7 +171,7 @@ export class ReturnsService {
     let q = this.supabaseService
       .from('returns')
       .select(
-        '*, loans(*, items(id, name, code), users(id, name, email, class_name)), processed_by_user:users!returns_processed_by_fkey(id, name)',
+        '*, loans(*, items(id, name, code), users!user_id(id, name, email, class_name), borrower:users!user_id(id, name, email, class_name)), processed_by_user:users!processed_by(id, name)',
         { count: 'exact' },
       );
 
@@ -204,7 +206,7 @@ export class ReturnsService {
     const { data, error } = await this.supabaseService
       .from('returns')
       .select(
-        '*, loans(*, items(id, name, code, image_url), users(id, name, email, phone, class_name)), processed_by_user:users!returns_processed_by_fkey(id, name)',
+        '*, loans(*, items(id, name, code, image_url), users!user_id(id, name, email, phone, class_name), borrower:users!user_id(id, name, email, phone, class_name)), processed_by_user:users!processed_by(id, name)',
       )
       .eq('id', id)
       .maybeSingle();

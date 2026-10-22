@@ -87,7 +87,9 @@ export class LoansService {
         notes: dto.notes?.trim() || null,
         status: LoanStatus.PENDING,
       })
-      .select('*, items(id, name, code, image_url), users(id, name, email)')
+      .select(
+        '*, items(id, name, code, image_url), users!user_id(id, name, email), borrower:users!user_id(id, name, email), approver:users!approved_by(id, name, email)',
+      )
       .single();
 
     if (loanError || !newLoan) {
@@ -120,7 +122,7 @@ export class LoansService {
     let q = this.supabaseService
       .from('loans')
       .select(
-        '*, items(id, name, code, image_url, condition, status, categories(id, name)), users(id, name, email, class_name, major, phone)',
+        '*, items(id, name, code, image_url, condition, status, categories(id, name)), users!user_id(id, name, email, class_name, major, phone), borrower:users!user_id(id, name, email, class_name, major, phone), approver:users!approved_by(id, name, email)',
         { count: 'exact' },
       );
 
@@ -169,7 +171,7 @@ export class LoansService {
     const { data: loan, error } = await this.supabaseService
       .from('loans')
       .select(
-        '*, items(id, name, code, image_url, condition, status, categories(id, name)), users(id, name, email, class_name, major, phone), returns(*), fines(*)',
+        '*, items(id, name, code, image_url, condition, status, categories(id, name)), users!user_id(id, name, email, class_name, major, phone), borrower:users!user_id(id, name, email, class_name, major, phone), approver:users!approved_by(id, name, email), returns(*), fines(*)',
       )
       .eq('id', id)
       .maybeSingle();
@@ -213,7 +215,9 @@ export class LoansService {
         approved_at: new Date().toISOString(),
       })
       .eq('id', id)
-      .select('*, items(id, name), users(id, name, email)')
+      .select(
+        '*, items(id, name), users!user_id(id, name, email), borrower:users!user_id(id, name, email), approver:users!approved_by(id, name, email)',
+      )
       .single();
 
     if (updateErr) {
@@ -279,7 +283,9 @@ export class LoansService {
         approved_at: loan.approved_at || new Date().toISOString(),
       })
       .eq('id', id)
-      .select('*, items(id, name), users(id, name, email)')
+      .select(
+        '*, items(id, name), users!user_id(id, name, email), borrower:users!user_id(id, name, email), approver:users!approved_by(id, name, email)',
+      )
       .single();
 
     if (updateErr) {
@@ -327,7 +333,9 @@ export class LoansService {
         approved_by: staffId,
       })
       .eq('id', id)
-      .select('*, items(id, name), users(id, name, email)')
+      .select(
+        '*, items(id, name), users!user_id(id, name, email), borrower:users!user_id(id, name, email), approver:users!approved_by(id, name, email)',
+      )
       .single();
 
     if (updateErr) {

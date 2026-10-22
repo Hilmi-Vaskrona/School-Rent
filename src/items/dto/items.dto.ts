@@ -5,15 +5,16 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
+  Matches,
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ItemCondition, ItemStatus } from '../../common/enums/app.enums';
+import { UUID_REGEX } from '../../common/constants/app.constants';
 
 export class CreateItemDto {
   @ApiProperty({ example: 'd0000000-0000-0000-0000-000000000001', description: 'ID Kategori' })
-  @IsUUID('4', { message: 'ID Kategori harus UUID yang valid' })
+  @Matches(UUID_REGEX, { message: 'ID Kategori harus UUID yang valid' })
   @IsNotEmpty({ message: 'Kategori barang harus dipilih' })
   category_id: string;
 
@@ -64,7 +65,7 @@ export class CreateItemDto {
 export class UpdateItemDto {
   @ApiPropertyOptional({ example: 'd0000000-0000-0000-0000-000000000001' })
   @IsOptional()
-  @IsUUID('4')
+  @Matches(UUID_REGEX, { message: 'ID Kategori harus UUID yang valid' })
   category_id?: string;
 
   @ApiPropertyOptional({ example: 'BRG-ELK-001' })
@@ -120,7 +121,7 @@ export class QueryItemsDto {
 
   @ApiPropertyOptional({ description: 'Filter berdasarkan ID kategori' })
   @IsOptional()
-  @IsUUID('4')
+  @Matches(UUID_REGEX, { message: 'category_id harus berupa UUID yang valid' })
   category_id?: string;
 
   @ApiPropertyOptional({ enum: ItemCondition, description: 'Filter berdasarkan kondisi' })

@@ -108,7 +108,9 @@ export class DashboardService {
     // 5. Pengajuan pending terbaru
     const { data: pendingList } = await this.supabaseService
       .from('loans')
-      .select('*, items(id, name, code), users(id, name, email, class_name)')
+      .select(
+        '*, items(id, name, code), users!user_id(id, name, email, class_name), borrower:users!user_id(id, name, email, class_name)',
+      )
       .eq('status', LoanStatus.PENDING)
       .order('created_at', { ascending: true })
       .limit(5);
